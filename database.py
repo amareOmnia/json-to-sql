@@ -1,7 +1,7 @@
-import psycopg2
+import psycopg2 as psql
 
 class Database:
-    def __init__(self, host, database, user, password):
+    def __init__(self, host, database, user, password=''):
         self.database = psql.connect(\
             host     = host, 
             database = database,
