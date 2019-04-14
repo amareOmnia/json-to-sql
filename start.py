@@ -1,5 +1,6 @@
 import database
 import table_create
+import table_config
 import argparse
 import ast
 
@@ -10,10 +11,47 @@ args = parse.parse_args()
 filename = args.filename
 file = open(filename, 'r')
 
-for line in file:
-    line_dict = eval(line.replace('false','False').replace('true', 'True').replace('null','None'))
-    print(line_dict)
-    print(type(line_dict))
-    break
+db = database.Database()
+
+def handle_bad_text(dict_string):
+    parsed = dict_string
+    for bad, good in table_config.get_bad_text().items():
+        parsed = parsed.replace(bad, good)
+    return parsed
+
+def create_dict_from_line(line_string):
+    parsed_line = handle_bad_text(line_string)
+    try:
+        line_dict = eval(parsed_line)
+    except:
+        line_dict = None
+    return line_dict
+
+def refine_dict_to_spec(full_dict):
+    refined_dict = {}
+    # reduces dictionary to contain only the desired keys (defined in table_config.py)
+    for key in table_config.get_column_config().keys():
+        refined_dict[key] = full_dict[key]
+    return refined_dict
+        
+def build_list_of_dicts(file):
+    list_of_dicts = []
+    i = 1
+    for line in file:
+        print(i)
+        line_dict = create_dict_from_line(line)
+        if line_dict == None:
+            i +=1
+            continue
+        refined_dict = refine_dict_to_spec(line_dict)
+        list_of_dicts.append(refined_dict)
+        i +=1
+    return list_of_dicts
+
+data = build_list_of_dicts(file)
+
+for item in data:
+    query = table_create.generate_insert(item)
+    print(query)
 
 print(table_create.generate_table_query())

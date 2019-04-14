@@ -10,4 +10,16 @@ def generate_table_query():
         query += '''{0} {1}
         '''.format(column, data_type)
     return query
-        
+
+def generate_insert(dict):
+    query = "INSERT INTO {0} VALUES (".format(tc.get_table_name())
+    i = 1
+    for key, val in dict.items():
+        if type(val) is str:
+            query+='"{}"'.format(val)
+        if i >= len(dict):
+            query += ')'
+        else:
+            query += ', '
+        i += 1
+    return query
