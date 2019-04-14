@@ -19,8 +19,8 @@ def get_table_name():
 # Each key is a column name, its value is the pSQL data type
 def get_column_config():
     return{
-        'id'        : 'charvar(8)',
-        'parent_id' : 'charvar(8)',
+        'comment_id': 'text',
+        'parent_id' : 'text',
         'score'     : 'integer',
         'subreddit' : 'text',
         'body'      : 'text'
@@ -32,6 +32,7 @@ def get_bad_text():
         'false' : 'False',
         'true'  : 'True',
         'null'  : 'None',
+        '"id"'  : '"comment_id"',
         '\\"'   : "'",
         '\\'    : ' '
     }

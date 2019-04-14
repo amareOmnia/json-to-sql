@@ -38,7 +38,6 @@ def build_list_of_dicts(file):
     list_of_dicts = []
     i = 1
     for line in file:
-        print(i)
         line_dict = create_dict_from_line(line)
         if line_dict == None:
             i +=1
@@ -50,8 +49,9 @@ def build_list_of_dicts(file):
 
 data = build_list_of_dicts(file)
 
+# table_query = table_create.generate_table_query()
+# db.execute_query(table_query, False)
+# exit()
 for item in data:
     query = table_create.generate_insert(item)
-    print(query)
-
-print(table_create.generate_table_query())
+    db.execute_query(query, False)

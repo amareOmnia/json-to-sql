@@ -8,8 +8,18 @@ class Database:
             host     = login['host'], 
             database = login['database'],
             user     = login['user'],
-            password = login['password']).cursor()
+            password = login['password'])
+        
+        self.connection = self.database.cursor()
 
-    def execute_query(self, query):
-        self.database.execute(query)
-        return self.database.fetchall()
+    def execute_query(self, query, return_result=True):
+        self.connection.execute(query)
+        if return_result:
+            return self.database.fetchall()
+        else:
+            return
+    
+    def close_connection(self):
+        self.connection.close()
+        self.database.close()
+        return
